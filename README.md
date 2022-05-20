@@ -8,15 +8,32 @@ Simple interface for extracting lexica scores from text.
 
 ## Getting started
 
+Get a lexical estimate from a single piece of text:
+
 ```
 > from dlatk-lexica.workers import LexiconExtractor as lex
 
 > le = lex("stress")
-> text = "He'll find you that's what he does, That's all he does!"
+> text = "He'll find you that's what he does, that's all he does!"
 > le.get_scores(text)
-[{'stress': 27.650010063993}]
-
+[{'stress': 1.9407162885529994}]
 ```
+
+Get estimates from a list of text:
+```
+> text_list = ["What day is it?  The date...", "Thursday...uh...May twelfth.", "What year?!"]
+> le.get_scores(text_list)
+[{'stress': -0.11333633586700004}, {'stress': 2.4685546792629998}, {'stress': -0.23413304501233334}]
+```
+
+Use more than one lexica:
+```
+> le.combine_lexica("affect")
+> le.get_scores(text)
+[{'affect': 5.058933696845417, 'stress': 1.9407162885529994}]
+```
+
+
 
 ## Available Lexica
 
