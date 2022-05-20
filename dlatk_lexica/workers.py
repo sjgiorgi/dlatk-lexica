@@ -53,22 +53,10 @@ class TextWorker(object):
         document = self.remove_urls(document)
         tokens = self.tok.tokenize(document)
 
-        #ngrams = Counter([" ".join(x) for x in zip(*[tokens[i:] for i in range(n)])])
         ngrams = Counter([" ".join(x) for x in zip(*[tokens[n:]])])
+        total_ngrams = float(sum(ngrams.values()))
+        ngrams = {gram: value / total_ngrams for gram, value in ngrams.items()}
         return ngrams
-
-    def fullNGramExtract(self, document_list, n=1):
-        """
-        Extract n-grams from a list of documents
-        """
-        all_ngrams = Counter()
-        for i in range(n):
-            this_ngrams = Counter()
-            for document in document_list:
-                this_ngrams.update(self.extractNgramPerDoc(document, n))
-            total_ngrams = float(sum(this_ngrams.values()))
-            all_ngrams.update({gram: value / total_ngrams for gram, value in this_ngrams.items()})
-        return all_ngrams
 
     
 class LexiconExtractor(TextWorker):
