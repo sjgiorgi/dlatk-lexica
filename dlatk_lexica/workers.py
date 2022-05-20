@@ -67,9 +67,10 @@ class LexiconExtractor(TextWorker):
 
     def __init__(self, lexicon_name):
         super(LexiconExtractor, self).__init__()
+        self.lexicon_name = lexicon_name
         self._lex_dir = os.path.dirname(os.path.realpath(__file__)) + "/lexica/"
         self.tok = Tokenizer()
-        self.lex = self.load_lexicon(lexicon_name)
+        self.lex = self.load_lexicon( self.lexicon_name)
         self.available_lexica = self._get_available_lexica()
         
 
@@ -81,20 +82,34 @@ class LexiconExtractor(TextWorker):
         return sorted(all_lex)
 
     def upload_lexicon(self, json_file):
-        
         jf = Path(json_file)
 
         if jf.is_file():
-            with open(json_file) as json_file:  
-                data = json.load(json_file)
+            with open(json_file) as this_json_file:  
+                data = json.load(this_json_file)
             if not isinstance(data, dict):
                 print("The file must be a Python dictionary. Unable to upload.")
                 return False
-            shutil.copyfile(json_file, self._lex_dir)
+            shutil.copyfile(json_file, self._lex_dir + os.path.basename(json_file))
             return True
         else:
             print("The file {json_file} does not exist".format(json_file=json_file))
             return False
+
+    def combine_lexica(self, lexicon_name):
+        new_lex = self.load_lexicon(lexicon_name)
+        for k,v in self.lex.items():
+            if k in new_lex:
+                new_lex[k].update(v)
+            else:
+                new_lex[k] = v
+        self.lex = new_lex
+        #self.lex = {**self.lex, **new_lex} # THIS ISN'T CORRECT
+        
+        if not isinstance(self.lexicon_name, list):
+            self.lexicon_name = [self.lexicon_name]
+        self.lexicon_name.append(lexicon_name)
+        return True
 
     def load_lexicon(self, lexicon_name):
         try:
