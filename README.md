@@ -12,8 +12,9 @@ Simple interface for extracting lexica scores from text.
 > from dlatk-lexica.workers import LexiconExtractor as lex
 
 > le = lex("stress")
-> le.get_scores("stress")
-{"stress": 0.1672}
+> text = "He'll find you that's what he does, That's all he does!"
+> le.get_scores(text)
+[{'stress': 27.650010063993}]
 
 ```
 

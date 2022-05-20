@@ -72,20 +72,25 @@ class TextWorker(object):
 
     
 class LexiconExtractor(TextWorker):
+    # TODO
+    ### Binary ngram encoding for affect
+    ### Lex Norm
+    ### LIWC Norm
 
     def __init__(self, lexicon_name):
         super(LexiconExtractor, self).__init__()
+        self._lex_dir = os.path.dirname(os.path.realpath(__file__)) + "/lexica/"
         self.tok = Tokenizer()
         self.lex = self.load_lexicon(lexicon_name)
         self.available_lexica = self._get_available_lexica()
-        self._lex_dir = os.path.dirname(os.path.erealpath(__file__)) + "/lexica/"
+        
 
     def _get_available_lexica(self):
         all_lex = []
         for file in os.listdir(self._lex_dir):
             if file.endswith(".json"):
                 all_lex.append(file.replace(".json", ""))
-        return all_lex
+        return sorted(all_lex)
 
     def upload_lexicon(self, json_file):
         
