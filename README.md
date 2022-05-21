@@ -77,7 +77,7 @@ Guntuku, S. C., Buffone, A., Jaidka, K., Eichstaedt, J. C., & Ungar, L. H. (2019
 
 ```
 
-# Adding Custom Lexica
+## Adding Custom Lexica
 
 We assume lexica are of the form `category`, `word`, `weight` where weighted words are contained in categories. Words can belong to multiple categories. New lexica must be in json form:
 ```
