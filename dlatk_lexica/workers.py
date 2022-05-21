@@ -57,7 +57,6 @@ class TextWorker(object):
         total_ngrams = float(sum(ngrams.values()))
         ngrams = {gram: value / total_ngrams for gram, value in ngrams.items()}
         return ngrams
-
     
 class LexiconExtractor(TextWorker):
     # TODO
@@ -68,12 +67,11 @@ class LexiconExtractor(TextWorker):
     def __init__(self, lexicon_name):
         super(LexiconExtractor, self).__init__()
         self.lexicon_name = lexicon_name
-        self._lex_dir = os.path.dirname(os.path.realpath(__file__)) + "/lexica/"
+        self._lex_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/lexica/"
         self.tok = Tokenizer()
         self.lex = self.load_lexicon( self.lexicon_name)
         self.available_lexica = self._get_available_lexica()
         
-
     def _get_available_lexica(self):
         all_lex = []
         for file in os.listdir(self._lex_dir):
@@ -109,6 +107,19 @@ class LexiconExtractor(TextWorker):
         if not isinstance(self.lexicon_name, list):
             self.lexicon_name = [self.lexicon_name]
         self.lexicon_name.append(lexicon_name)
+        return True
+
+    def remove_lexica(self, lexicon_name):
+        for k,v in self.lex.items():
+            if lexicon_name in v:
+                del v[lexicon_name]
+            if not v:
+                del self.lex[k]
+        if isinstance(self.lexicon_name, list):
+            self.lexicon_name.remove(lexicon_name)
+        else:
+            if lexicon_name == self.lexicon_name:
+                self.lexicon_name = ""
         return True
 
     def load_lexicon(self, lexicon_name):
