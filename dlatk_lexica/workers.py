@@ -59,10 +59,10 @@ class TextWorker(object):
         return ngrams
     
 class LexiconExtractor(TextWorker):
-    # TODO
-    ### Binary ngram encoding for affect
-    ### Lex Norm
+    ### TODO
+    ### Lex Norm for NRC
     ### LIWC Norm
+    ### none
 
     def __init__(self, lexicon_name):
         super(LexiconExtractor, self).__init__()
@@ -102,18 +102,18 @@ class LexiconExtractor(TextWorker):
             else:
                 new_lex[k] = v
         self.lex = new_lex
-        #self.lex = {**self.lex, **new_lex} # THIS ISN'T CORRECT
-        
+
         if not isinstance(self.lexicon_name, list):
             self.lexicon_name = [self.lexicon_name]
         self.lexicon_name.append(lexicon_name)
         return True
 
     def remove_lexica(self, lexicon_name):
-        for k,v in self.lex.items():
+        this_lex = dict(self.lex)
+        for k,v in this_lex.items():
             if lexicon_name in v:
-                del v[lexicon_name]
-            if not v:
+                del self.lex[k][lexicon_name]
+            if not self.lex[k]:
                 del self.lex[k]
         if isinstance(self.lexicon_name, list):
             self.lexicon_name.remove(lexicon_name)
@@ -140,16 +140,27 @@ class LexiconExtractor(TextWorker):
         
         results = []
         for document in document_list:
-            ngrams = self.extractNgramPerDoc(document)
+            n = 1
+            if 'affect' in self.lexicon_name:
+                n = 1
+            ngrams = {}
+            for ii in range(n):
+                ngrams.update(self.extractNgramPerDoc(document, n=ii+1))
             pLex = {} # prob of lex given user
             for term, cats in self.lex.items():
                 try:
                     gn = ngrams[term]
                     for cat, weight in cats.items():
                         try:
-                            pLex[cat] += float(gn)*weight
+                            if cat == "affect":
+                                pLex[cat] += float(1)*weight
+                            else:
+                                pLex[cat] += float(gn)*weight
                         except KeyError:
-                            pLex[cat] = float(gn)*weight
+                            if cat == "affect":
+                                pLex[cat] = float(1)*weight
+                            else:
+                                pLex[cat] = float(gn)*weight
                 except KeyError:
                     pass #not in lex
 
