@@ -4,7 +4,20 @@ Simple interface for extracting lexica scores from text.
 
 ## Installation
 
+First clone the repo
 
+```
+git clone https://github.com/sjgiorgi/dlatk-lexica.git
+```
+
+Then add the location of the cloned directory to your path. One way to do this is to add it inside your Python code or shell:
+
+```
+>>> import sys
+>>> sys.path.append("/path/to/cloned/repo/dlatk_lexica")
+```
+
+where `/path/to/cloned/repo/` is the folder your ran the initial `git clone` command in.
 
 ## Getting started
 
