@@ -17,7 +17,7 @@ Then add the location of the cloned directory to your path. One way to do this i
 >>> sys.path.append("/path/to/cloned/repo/dlatk_lexica")
 ```
 
-where `/path/to/cloned/repo/` is the folder your ran the initial `git clone` command in.
+where `/path/to/cloned/repo/` is the directory where you ran the initial `git clone` command.
 
 ## Getting started
 
