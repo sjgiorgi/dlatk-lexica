@@ -13,8 +13,8 @@ git clone https://github.com/sjgiorgi/dlatk-lexica.git
 Then add the location of the cloned directory to your path. One way to do this is to add it inside your Python code or shell:
 
 ```
->>> import sys
->>> sys.path.append("/path/to/cloned/repo/dlatk_lexica")
+> import sys
+> sys.path.append("/path/to/cloned/repo/dlatk_lexica")
 ```
 
 where `/path/to/cloned/repo/` is the directory where you ran the initial `git clone` command.
@@ -105,4 +105,15 @@ For example, the age/gender lexica is of the form:
 To upload a json file simply run:
 ```
 le.upload_lexicon("/path/to/file/lexicon.json")
+```
+
+You can then verify that the json was uploaded by running:
+```
+> le.available_lexica
+[..., 'lexicon', ...]
+```
+
+Here you should see the name of the json file in the returned list. Next, load and use your lexicon with
+```
+> le = lex("lexicon")
 ```
