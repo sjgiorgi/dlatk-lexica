@@ -18,6 +18,7 @@ class TextWorker(object):
         self.newlines = re.compile(r'\s*\n\s*')
         self.handle = re.compile(r"(?<![A-Za-z0-9_!@#\$%&*])@(([A-Za-z0-9_]){20}(?!@))|(?<![A-Za-z0-9_!@#\$%&*])@(([A-Za-z0-9_]){1,19})(?![A-Za-z0-9_]*@)")
         self.url = re.compile(r"http\S+")
+        self.tok = Tokenizer()
     
     def shrinkSpace(self, text):
         """
@@ -62,17 +63,18 @@ class LexiconExtractor(TextWorker):
     ### TODO
     ### Lex Norm for NRC
     ### LIWC Norm
-    ### none
+    ### multi-word lexica (n>1)
 
     def __init__(self, lexicon_name):
         super(LexiconExtractor, self).__init__()
         self.lexicon_name = lexicon_name
         self._lex_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/lexica/"
-        self.tok = Tokenizer()
-        self.lex = self.load_lexicon( self.lexicon_name)
+        self.lex = self.load_lexicon(self.lexicon_name)
         self.available_lexica = self._get_available_lexica()
         
     def _get_available_lexica(self):
+        """
+        """
         all_lex = []
         for file in os.listdir(self._lex_dir):
             if file.endswith(".json"):
@@ -87,12 +89,9 @@ class LexiconExtractor(TextWorker):
                 data = json.load(this_json_file)
             if not isinstance(data, dict):
                 print("The file must be a Python dictionary. Unable to upload.")
-                return False
             shutil.copyfile(json_file, self._lex_dir + os.path.basename(json_file))
-            return True
         else:
             print("The file {json_file} does not exist".format(json_file=json_file))
-            return False
 
     def combine_lexica(self, lexicon_name):
         new_lex = self.load_lexicon(lexicon_name)
@@ -106,7 +105,7 @@ class LexiconExtractor(TextWorker):
         if not isinstance(self.lexicon_name, list):
             self.lexicon_name = [self.lexicon_name]
         self.lexicon_name.append(lexicon_name)
-        return True
+        
 
     def remove_lexica(self, lexicon_name):
         this_lex = dict(self.lex)
@@ -120,7 +119,7 @@ class LexiconExtractor(TextWorker):
         else:
             if lexicon_name == self.lexicon_name:
                 self.lexicon_name = ""
-        return True
+
 
     def load_lexicon(self, lexicon_name):
         try:
